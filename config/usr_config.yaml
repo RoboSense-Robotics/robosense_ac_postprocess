@@ -1,0 +1,26 @@
+postprocess_node:
+  calib_file: "config/calibration.yaml"
+  sub_image_topic: /rs_camera/rgb
+  sub_lidar_topic: /rs_lidar/points
+  sub_imu_topic: /rs_imu
+  MOTION_CORRECT: true
+  USING_IMU_LINEAR_ACCELERATION: false # 使用IMU线加速度数据进行运动补偿
+  USING_ODOM_LINEAR_VELOCITY: false # 使用ODOM数据作为线速度补偿, 如果为true，则会覆盖IMU线加速度计算出来的位移
+  NUM_DRIFT: 100 # 计算零飘所需要的IMU数据数目
+  FRAME_TAIL: true # 将点补偿到点云帧尾时间
+  USE_RANGE_IMG: false # 使用范围图进行去遮挡
+  ORI_POINTS_TOPIC: /rslidar_points_origin #原始点云 + 运动矫正点云获取rgb
+  ORI_RGB_POINTS_TOPIC: /rslidar_points_origin_rgb #原始点云 + 运动矫正点云获取rgb
+  ORI_DEOCC_RGB_POINTS_TOPIC: /rslidar_points_origin_deocc_rgb #原始点云 + 运动校正 + 去遮挡点云获取rgb
+  PROJ_IMG_TOPIC: /camera/image_raw/proj_motion
+  PROJ_DEOCC_IMG_TOPIC: /camera/image_raw/proj_motion_deocc
+  RANGE_IMG_TOPIC: /camera/image_raw/range_motion
+  CAM_RANGE_IMG_TOPIC: /camera/image_raw/cam_range_motion
+  # PROJECTION_ROOT: # 保存数据的位置
+  CAMERA_LIDAR_TIME_DURA_THRES: 0.05
+  RANGE_IMAGE:
+    resolution: 0.625 # [°]
+    pitch_min: -45.0  # [°]
+    pitch_max:  45.0  # [°]
+    yaw_min:   -35.0  # [°]
+    yaw_max:    35.0  # [°]
