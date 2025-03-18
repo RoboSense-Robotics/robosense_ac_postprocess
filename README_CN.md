@@ -1,10 +1,10 @@
-# postprocess
+# robosense_ac_postprocess
 
 [README](README.md) | [中文文档](README_CN.md)
 
 ## 1. 简介
 
-`postprocess` 是激光与图像的后处理代码仓库，通过图像给点云染色。
+`robosense_ac_postprocess` 是激光与图像的后处理代码仓库，通过图像给点云染色。
 
 ## 2. 前置依赖
 
@@ -25,28 +25,26 @@
 ```bash
 cd WORKSPACE_PATH
 mkdir super_sensor_sdk_ros2 && cd super_sensor_sdk_ros2
-# ssh
-git clone git@gitlab.robosense.cn:super_sensor_sdk/ros2_sdk/postprocess.git -b main
 # http
-git clone http://gitlab.robosense.cn/super_sensor_sdk/ros2_sdk/postprocess.git -b main
+git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b main
 ```
 
 ### 3.2 安装依赖
 
-可以通过 `rosdep` 工具安装 `postprocess` 编译所需的依赖
+可以通过 `rosdep` 工具安装 `robosense_ac_postprocess` 编译所需的依赖
 
 ```bash
 cd super_sensor_sdk_ros2
-rosdep install --from-paths postprocess --ignore-src -r -y
+rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
 
-### 3.3 编译 postprocess
+### 3.3 编译 robosense_ac_postprocess
 
-在工作空间下执行以下命令来编译安装 `postprocess`
+在工作空间下执行以下命令来编译安装 `robosense_ac_postprocess`
 
 ```bash
 cd WORKSPACE_PATH
-colcon build --symlink-install --parallel-workers 8 --packages-select postprocess
+colcon build --symlink-install --parallel-workers 8 --packages-select robosense_ac_postprocess
 ```
 
 编译安装完成后，推荐刷新一下工作空间的 `bash profile`，确保组件功能正常
@@ -60,7 +58,7 @@ source install/setup.bash
 可以连接超级传感器在线获取数据，或者离线播放数据包进行测试。
 #### 4.1.1 运行超级传感器
 
-参考 [文档](http://gitlab.robosense.cn/super_sensor_sdk/ros2_sdk/sdk_infra/-/blob/main/README.md) 运行超级传感器节点，实时获取数据
+参考 [文档](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/tree/main/modules/ros_metas) 运行超级传感器节点，实时获取数据
 
 #### 4.1.2 离线播放数据
 使用 `ros2 bag` 命令播放数据包，例如：
@@ -70,14 +68,14 @@ ros2 bag play BAG_PATH
 ```
 ### 4.2 运行节点
 
-通过 `ros2 launch` 命令可以运行 `postprocess` 节点
+通过 `ros2 launch` 命令可以运行节点
 
 ```bash
-ros2 launch postprocess start.py
+ros2 launch robosense_ac_postprocess start.py
 ```
 ## 5. FAQ
 
-[Create New Issue](http://gitlab.robosense.cn/super_sensor_sdk/ros2_sdk/postprocess/-/issues/new)
+[Create New Issue](https://github.com/RoboSense-Robotics/robosense_ac_postprocess/issues/new)
 
 ## 6. 开源许可
 

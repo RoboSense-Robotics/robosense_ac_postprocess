@@ -6,7 +6,7 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
-    package_dir = get_package_share_directory('postprocess')
+    package_dir = get_package_share_directory('robosense_ac_postprocess')
     rviz_config_file = os.path.join(
         package_dir,
         'rviz2_config',
@@ -15,7 +15,7 @@ def generate_launch_description():
     config_file = os.path.join(package_dir, "config", "usr_config.yaml")
 
     postprocess_node = Node(
-        package='postprocess',
+        package='robosense_ac_postprocess',
         executable='postprocess_node',
         name='postprocess_node',
         output='screen',

@@ -1,10 +1,10 @@
-# postprocess
+# robosense_ac_postprocess
 
 [README](README.md) | [中文文档](README_CN.md)
 
 ## 1. Introduction
 
-`postprocess` is a repository for post-processing LiDAR and image data, coloring point clouds based on images.
+`robosense_ac_postprocess` is a repository for post-processing LiDAR and image data, coloring point clouds based on images.
 
 ## 2. Prerequisites
 
@@ -25,28 +25,25 @@ Create a new folder or navigate to your existing `ros2` workspace, then execute 
 ```bash
 cd WORKSPACE_PATH
 mkdir super_sensor_sdk_ros2 && cd super_sensor_sdk_ros2
-# ssh
-git clone git@gitlab.robosense.cn:super_sensor_sdk/ros2_sdk/postprocess.git -b main
-# http
-git clone http://gitlab.robosense.cn/super_sensor_sdk/ros2_sdk/postprocess.git -b main
+git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b main
 ```
 
 ### 3.2 Install Dependencies
 
-You can use the `rosdep` tool to install the dependencies needed for compiling `postprocess`:
+You can use the `rosdep` tool to install the dependencies needed for compiling `robosense_ac_postprocess`:
 
 ```bash
 cd super_sensor_sdk_ros2
-rosdep install --from-paths postprocess --ignore-src -r -y
+rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
 
-### 3.3 Build Postprocess
+### 3.3 Build robosense_ac_postprocess
 
-Execute the following command under your workspace to compile and install `postprocess`:
+Execute the following command under your workspace to compile and install `robosense_ac_postprocess`:
 
 ```bash
 cd WORKSPACE_PATH
-colcon build --symlink-install --parallel-workers 8 --packages-select postprocess
+colcon build --symlink-install --parallel-workers 8 --packages-select robosense_ac_postprocess
 ```
 
 After compilation and installation, it's recommended to refresh the workspace's `bash profile` to ensure component functionality:
@@ -63,7 +60,7 @@ Data can be obtained online from Super Sensors or offline through data packets f
 
 #### 4.1.1 Running Super Sensors
 
-Refer to the [documentation](http://gitlab.robosense.cn/super_sensor_sdk/ros2_sdk/sdk_infra/-/blob/main/README.md) to run the Super Sensor node for real-time data acquisition.
+Refer to the [documentation](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/tree/main/modules/ros_metas) to run the Super Sensor node for real-time data acquisition.
 
 #### 4.1.2 Offline Playback
 
@@ -75,15 +72,15 @@ ros2 bag play BAG_PATH
 
 ### 4.2 Running Nodes
 
-The `postprocess` node can be launched using the `ros2 launch` command:
+The node can be launched using the `ros2 launch` command:
 
 ```bash
-ros2 launch postprocess start.py
+ros2 launch robosense_ac_postprocess start.py
 ```
 
 ## 5. FAQ
 
-[Create New Issue](http://gitlab.robosense.cn/super_sensor_sdk/ros2_sdk/postprocess/-/issues/new)
+[Create New Issue](https://github.com/RoboSense-Robotics/robosense_ac_postprocess/issues/new)
 
 ## 6. Open Source License
 
