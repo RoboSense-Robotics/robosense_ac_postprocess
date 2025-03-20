@@ -24,7 +24,7 @@
 
 ```bash
 cd WORKSPACE_PATH
-mkdir super_sensor_sdk_ros2 && cd super_sensor_sdk_ros2
+mkdir ac_studio && cd ac_studio
 # http
 git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b main
 ```
@@ -34,7 +34,7 @@ git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b 
 可以通过 `rosdep` 工具安装 `robosense_ac_postprocess` 编译所需的依赖
 
 ```bash
-cd super_sensor_sdk_ros2
+cd ac_studio
 rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
 

@@ -24,7 +24,7 @@ Create a new folder or navigate to your existing `ros2` workspace, then execute 
 
 ```bash
 cd WORKSPACE_PATH
-mkdir super_sensor_sdk_ros2 && cd super_sensor_sdk_ros2
+mkdir ac_studio && cd ac_studio
 git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b main
 ```
 
@@ -33,7 +33,7 @@ git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b 
 You can use the `rosdep` tool to install the dependencies needed for compiling `robosense_ac_postprocess`:
 
 ```bash
-cd super_sensor_sdk_ros2
+cd ac_studio
 rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
 
