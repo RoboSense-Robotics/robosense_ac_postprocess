@@ -55,11 +55,11 @@ public:
 
   void InitCalib();
 
-  void AddData(const sensor_msgs::msg::Imu::SharedPtr& msg_ptr);
+  void AddData(const ImuMsgPtr& msg_ptr);
 
-  void AddData(const sensor_msgs::msg::PointCloud2::SharedPtr& msg_ptr);
+  void AddData(const PointCloud2MsgPtr& msg_ptr);
 
-  void AddData(const sensor_msgs::msg::Image::SharedPtr& msg_ptr);
+  void AddData(const ImageMsgPtr& msg_ptr);
 
   void Process(const PostprocessOutputMsg::Ptr& msg_ptr);
 
@@ -79,7 +79,7 @@ public:
  private:
   const std::string Name() const { return "PostprocessImpl"; }
   inline void labelImage(cv::Mat& img, const std::string& label);
-  std::shared_ptr<sensor_msgs::msg::Image> findNearestCam(double point_stamp);
+  ImageMsgPtr findNearestCam(double point_stamp);
   NodeConfig motion_cfg_;
   // for color mapping
   float min_z_ = 0;
@@ -117,9 +117,9 @@ public:
   SyncVector<pcl::PointCloud<PointXYZIRT>::Ptr> point_cloud_free_vec_;
   SyncVector<pcl::PointCloud<PointXYZIRT>::Ptr> mc_point_cloud_vec_;
 
-  SyncQueue<std::shared_ptr<sensor_msgs::msg::PointCloud2>> point_cloud_queue_{1};
+  SyncQueue<PointCloud2MsgPtr> point_cloud_queue_{1};
   std::mutex cam_mt_;
-  std::deque<std::shared_ptr<sensor_msgs::msg::Image>> cam_queue_;
+  std::deque<ImageMsgPtr> cam_queue_;
 };
 
 }  // namespace postprocess

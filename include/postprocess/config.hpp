@@ -20,9 +20,7 @@ limitations under the License.
 #include <vector>
 #include <memory>
 
-#include "sensor_msgs/msg/point_cloud2.hpp"
-#include "sensor_msgs/msg/image.hpp"
-#include "sensor_msgs/msg/imu.hpp"
+#include "ros_dep.h"
 #include "postprocess/yaml_reader.hpp"
 #include "postprocess/range_image.hpp"
 namespace robosense {
@@ -31,13 +29,13 @@ namespace postprocess {
 struct PostprocessOutputMsg {
   using Ptr = std::shared_ptr<PostprocessOutputMsg>;
   PostprocessOutputMsg() {
-    motion_points_ptr = std::make_shared<sensor_msgs::msg::PointCloud2>();
-    rgb_points_ptr = std::make_shared<sensor_msgs::msg::PointCloud2>();
-    points_proj_img_ptr = std::make_shared<sensor_msgs::msg::Image>();
+    motion_points_ptr = PointCloud2MsgPtr(new PointCloud2Msg());
+    rgb_points_ptr = PointCloud2MsgPtr(new PointCloud2Msg());
+    points_proj_img_ptr = ImageMsgPtr(new ImageMsg());
   }
-  sensor_msgs::msg::PointCloud2::SharedPtr motion_points_ptr;
-  sensor_msgs::msg::PointCloud2::SharedPtr rgb_points_ptr;
-  sensor_msgs::msg::Image::SharedPtr points_proj_img_ptr;
+  PointCloud2MsgPtr motion_points_ptr;
+  PointCloud2MsgPtr rgb_points_ptr;
+  ImageMsgPtr points_proj_img_ptr;
 };
 
 struct TransformXYZQuat {

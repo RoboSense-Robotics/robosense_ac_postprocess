@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************/
-#include <rclcpp/rclcpp.hpp>
+#include "ros_dep.h"
 #include "postprocess/imu_process.hpp"
 
 namespace robosense {
@@ -578,11 +578,11 @@ bool ImuProcess::clearData(const std::size_t left_boundry_idx)
 //   return data;
 // }
 
-ImuData FromMsg(const sensor_msgs::msg::Imu::SharedPtr& imu_msg_ptr) {
+ImuData FromMsg(const ImuMsgPtr& imu_msg_ptr) {
   ImuData data;
 
   // 从 ROS 消息中提取时间戳
-  data.timestamp = rclcpp::Time(imu_msg_ptr->header.stamp).seconds();
+  data.timestamp = HeaderToSec(imu_msg_ptr->header);
 
   // 从 ROS 消息中提取角速度
   data.angular_velocity_x = imu_msg_ptr->angular_velocity.x;
