@@ -14,13 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************/
 #include "postprocess/config.hpp"
-
+#include <unistd.h>  // Linux/macOS
+#ifdef _WIN32
+#include <direct.h> // Windows（需包含此头文件）
+#endif
 namespace robosense {
 namespace postprocess {
 
 NodeConfig ParseNodeConfig(const YAML::Node& cfg) {
+  char buffer[256];
+  if (getcwd(buffer, sizeof(buffer)) != nullptr) {
+      std::cout << "current work dir is: " << buffer << std::endl;
+  }
   NodeConfig res_cfg;
   std::string calib_file = cfg["calib_file"].as<std::string>();
+#if defined(USE_ROS1)
+    calib_file = std::string(PROJECT_PATH) + "/" + calib_file;
+#elif defined(USE_ROS2)
+    calib_file = std::string(buffer) + "/" + calib_file;
+#endif
   std::cout << "calib_file: " << calib_file << std::endl;
   YAML::Node calib_node = YAML::LoadFile(calib_file);
   const YAML::Node& lidar_cfg = calib_node["Sensor"]["Lidar"];

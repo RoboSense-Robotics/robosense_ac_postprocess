@@ -17,7 +17,6 @@ limitations under the License.
 #include "postprocess/imu_process.hpp"
 #include "postprocess/camera_model.h"
 #include <thread>
-#include <rclcpp/rclcpp.hpp>
 #include <cv_bridge/cv_bridge.h>
 namespace robosense {
 namespace postprocess {
@@ -84,7 +83,7 @@ void PostprocessImpl::InitCalib() {
   std::cout << Name() << ": init calib done!";
 }
 
-void PostprocessImpl::AddData(const sensor_msgs::msg::Imu::SharedPtr& msg_ptr) {
+void PostprocessImpl::AddData(const ImuMsgPtr& msg_ptr) {
   if (msg_ptr != nullptr) {
     // RERROR << name() << ": get odom msg! " << msg_ptr->header.frame_id << ": " << msg_ptr->header.timestamp;
     auto imu_data = FromMsg(msg_ptr);
@@ -95,7 +94,7 @@ void PostprocessImpl::AddData(const sensor_msgs::msg::Imu::SharedPtr& msg_ptr) {
   }
 }
 
-void PostprocessImpl::AddData(const sensor_msgs::msg::PointCloud2::SharedPtr& msg_ptr) {
+void PostprocessImpl::AddData(const PointCloud2MsgPtr& msg_ptr) {
   if (msg_ptr != nullptr) {
     point_cloud_queue_.push(msg_ptr);
     std::cout << "point_cloud_queue_ size "<< point_cloud_queue_.size() << "\n";
@@ -104,7 +103,7 @@ void PostprocessImpl::AddData(const sensor_msgs::msg::PointCloud2::SharedPtr& ms
   }
 }
 
-void PostprocessImpl::AddData(const sensor_msgs::msg::Image::SharedPtr& msg_ptr) {
+void PostprocessImpl::AddData(const ImageMsgPtr& msg_ptr) {
   if (msg_ptr != nullptr) {
     std::unique_lock<std::mutex> lck(cam_mt_);
     cam_queue_.push_back(msg_ptr);
@@ -197,7 +196,7 @@ bool PostprocessImpl::ProcessPointCloud() {
   auto cm_cloud_msg = out_msg_ptr_->motion_points_ptr;
   pcl::toROSMsg(*cm_cloud, *cm_cloud_msg);
   cm_cloud_msg->header.frame_id = "rslidar";
-  cm_cloud_msg->header.stamp = rclcpp::Time(static_cast<int64_t>(points_stamp*1e9));
+  cm_cloud_msg->header.stamp = SecToHeaderStamp(points_stamp);
   mc_point_cloud_vec_.add(cm_cloud);
   point_cloud_free_vec_.add(ori_cloud);
 
@@ -215,14 +214,14 @@ inline void PostprocessImpl::labelImage(cv::Mat& img, const std::string& label) 
   cv::putText(img, label, textOrg, fontFace, fontScale, cv::Scalar(0, 0, 255), thickness, 8);
 }
 
-std::shared_ptr<sensor_msgs::msg::Image> PostprocessImpl::findNearestCam(double point_stamp) {
+ImageMsgPtr PostprocessImpl::findNearestCam(double point_stamp) {
   std::unique_lock<std::mutex> lck(cam_mt_);
-  std::shared_ptr<sensor_msgs::msg::Image> res_msg = nullptr;
+  ImageMsgPtr res_msg = nullptr;
   double min_dur = std::numeric_limits<double>::max();
   for (size_t i = 0; i < cam_queue_.size(); i++) {
     auto msg = cam_queue_[i];
     // auto cur_stamp = msg->capture_time.tv_sec + msg->capture_time.tv_usec / 1e6;
-    double cur_stamp = rclcpp::Time(msg->header.stamp).seconds();
+    double cur_stamp = HeaderToSec(msg->header);
     auto cam_point_dura = std::abs(cur_stamp - point_stamp);
     if (cam_point_dura < thres_ && cam_point_dura < min_dur) {
       res_msg = msg;
@@ -231,7 +230,7 @@ std::shared_ptr<sensor_msgs::msg::Image> PostprocessImpl::findNearestCam(double 
   }
   if (res_msg == nullptr) {
     // auto tail_stamp = cam_queue_.back()->capture_time.tv_sec + cam_queue_.back()->capture_time.tv_usec / 1e6;
-    double tail_stamp =  rclcpp::Time(cam_queue_.back()->header.stamp).seconds();
+    double tail_stamp = HeaderToSec(cam_queue_.back()->header);
     std::cout << "Failed to find cam, tail cam is " << std::to_string(tail_stamp)
            << " " << std::to_string(point_stamp - tail_stamp);
   }
@@ -251,7 +250,7 @@ bool PostprocessImpl::ProcessCompressedImage() {
     std::cout << "cam msg is null\n";
     return false;
   }
-  double cam_stamp = rclcpp::Time(msg->header.stamp).seconds();
+  double cam_stamp = HeaderToSec(msg->header);
   std::cout << "Process image msg " << std::to_string(cam_stamp) << " with point stamp "
             << std::to_string(pts_stamp)
             << " diff is: " << std::to_string(pts_stamp - cam_stamp) << std::endl;
@@ -321,10 +320,10 @@ bool PostprocessImpl::ProcessCompressedImage() {
     // std::cout << "rgb_pts size: " << rgb_pts->size() << std::endl;
     pcl::toROSMsg(*rgb_pts, *(out_msg_ptr_->rgb_points_ptr));
     out_msg_ptr_->rgb_points_ptr->header.frame_id = "rslidar";
-    out_msg_ptr_->rgb_points_ptr->header.stamp = rclcpp::Time(static_cast<int64_t>(pts_stamp*1e9));
+    out_msg_ptr_->rgb_points_ptr->header.stamp = SecToHeaderStamp(pts_stamp);
     cv::cvtColor(img_proj, img_proj, cv::COLOR_RGB2BGR);
-    auto img_msg_header = std_msgs::msg::Header();
-    img_msg_header.stamp = rclcpp::Time(static_cast<int64_t>(pts_stamp*1e9));
+    auto img_msg_header = msg->header;
+    img_msg_header.stamp = SecToHeaderStamp(pts_stamp);
     out_msg_ptr_->points_proj_img_ptr = cv_bridge::CvImage(img_msg_header, "bgr8", img_proj).toImageMsg();
     // robosense::ToImageMsg(img_proj);
     if (!projection_root_.empty()) {
@@ -400,11 +399,11 @@ bool PostprocessImpl::ProcessCompressedImage() {
 
     pcl::toROSMsg(*rgb_pts_deocc, *(out_msg_ptr_->rgb_points_ptr));
     out_msg_ptr_->rgb_points_ptr->header.frame_id = "rslidar";
-    out_msg_ptr_->rgb_points_ptr->header.stamp = rclcpp::Time(static_cast<int64_t>(pts_stamp*1e9));
+    out_msg_ptr_->rgb_points_ptr->header.stamp = SecToHeaderStamp(pts_stamp);
     cv::cvtColor(img_proj_deocc, img_proj_deocc, cv::COLOR_RGB2BGR);
-    auto img_msg_header = std_msgs::msg::Header();
-    img_msg_header.stamp = rclcpp::Time(static_cast<int64_t>(pts_stamp*1e9));
-    out_msg_ptr_->points_proj_img_ptr = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", img_proj_deocc).toImageMsg();
+    auto img_msg_header = msg->header;
+    img_msg_header.stamp = SecToHeaderStamp(pts_stamp);
+    out_msg_ptr_->points_proj_img_ptr = cv_bridge::CvImage(img_msg_header, "bgr8", img_proj_deocc).toImageMsg();
   }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> duration = end - start;

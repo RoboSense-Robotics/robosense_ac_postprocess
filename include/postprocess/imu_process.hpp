@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************/
-#ifndef POSTPROCESS_Imu_PROCESS_H_
-#define POSTPROCESS_Imu_PROCESS_H_
+#ifndef POSTPROCESS_IMU_PROCESS_H_
+#define POSTPROCESS_IMU_PROCESS_H_
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <unordered_map>
@@ -26,7 +26,6 @@ limitations under the License.
 #include <memory>
 #include <iostream>
 
-#include "sensor_msgs/msg/imu.hpp"
 #include "postprocess/log.hpp"
 
 namespace robosense {
@@ -304,8 +303,8 @@ private:
 // ImuData FromMsg(const common::Odom::Ptr& imu_msg);
 
 // ImuData FromMsg(const std::shared_ptr<robosense::common::MotionFrame>& imu_msg);
-ImuData FromMsg(const sensor_msgs::msg::Imu::SharedPtr& imu_msg_ptr);
+ImuData FromMsg(const ImuMsgPtr& imu_msg_ptr);
 
 }
 }
-#endif  // HYPER_VISION_POSTPROCESS_Imu_MODULE_H_
+#endif  // POSTPROCESS_IMU_PROCESS_H_
