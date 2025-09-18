@@ -159,10 +159,11 @@ void PostprocessNode::Core() {
       rec_depth_frame_.store(false);
       rec_image_frame_.store(false);
       std::cout << "Succ Process, Cost time: " << duration.count() << " ms" << std::endl;
-    } else {
-      std::this_thread::sleep_for(std::chrono::milliseconds(1));
-      continue;
-    }
+    } 
+    // else {
+    //   std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    //   continue;
+    // }
     // std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 }
