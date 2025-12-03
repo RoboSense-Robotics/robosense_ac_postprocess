@@ -71,14 +71,19 @@ source install/setup.bash
 ```
 
 ## 4. Running
-### 4.1 Acquiring Data
-Data can be obtained either by connecting to a  Active Camera online or by playing offline data packets for testing.
-#### 4.1.1 Running the Super Sensor
 
-Refer to the [documentation](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/tree/main/modules/ac_driver) to run the online node for real-time data acquisition. Follow the documentation instructions to set the corresponding environment variables in the terminal to enable zero-copy mode or non-zero-copy mode for data acquisition.
+### 4.1 Acquiring Data
+Data can be obtained either by connecting to a Active Camera online or by playing offline data packets offline.
+
+#### 4.1.1 Online Data Acquisition
+This is the online mode for real-time data acquisition from AC1. 
+
+- If you are using ROS1, please refer to this [repository](https://github.com/RoboSense-Robotics/robosense_ac_ros_sdk_infra) to ensure that the `robosense_ac_ros_sdk_infra` package is built and running in your workspace.
+
+- If you are using ROS2, please refer to this [repository](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra) to ensure that the `robosense_ac_ros2_sdk_infra` package is built and running in your workspace.
 
 #### 4.1.2 Offline Data Playback
-Use the `ros` command to play back data packets, for example:
+This is the offline mode for using recorded data packets. Use the `ros` command to play back data packets, for example:
 
 ```bash
 # ROS1
@@ -88,7 +93,7 @@ ros2 bag play BAG_PATH
 ```
 ### 4.2 Running Nodes
 
-Run nodes using the `ros` command:
+Run `postprocess` node using the `ros` command:
 
 ```bash
 # ROS1

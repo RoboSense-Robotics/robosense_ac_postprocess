@@ -70,14 +70,19 @@ source install/setup.bash
 ```
 
 ## 4. 运行
-### 4.1 获取数据
-可以连接 Active Camera 在线获取数据，或者离线播放数据包进行测试。
-#### 4.1.1 运行 Active Camera
 
-参考 [文档](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/tree/main/modules/ac_driver) 运行在线节点，实时获取数据。按照文档说明在终端设置对应环境变量，启用零拷贝模式或非零拷贝模式获取数据。
+### 4.1 获取数据
+数据可以通过在线连接 Active Camera 或离线播放数据包两种方式获取。
+
+#### 4.1.1 运行 Active Camera
+这是从AC1实时获取数据的在线模式。
+
+- 如果使用 ROS1 请参考此[仓库](https://github.com/RoboSense-Robotics/robosense_ac_ros_sdk_infra)以确保 `robosense_ac_ros_sdk_infra` 包已编译并在工作空间中运行。
+
+- 如果使用 ROS2 请参考此[仓库](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra)以确保 `robosense_ac_ros2_sdk_infra` 包已编译并在工作空间中运行。
 
 #### 4.1.2 离线播放数据
-使用 `ros` 命令播放数据包，例如：
+这是使用已录制数据包的离线模式，使用 ros 命令播放数据包，例如：
 
 ``` bash
 # ros1
@@ -87,7 +92,7 @@ ros2 bag play BAG_PATH
 ```
 ### 4.2 运行节点
 
-通过 `ros` 命令可以运行节点
+使用 `ros` 命令运行 `postprocess` 节点：
 
 ```bash
 # ros1
