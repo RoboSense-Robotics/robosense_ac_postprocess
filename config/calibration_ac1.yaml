@@ -19,11 +19,11 @@ Sensor:
     extrinsic:
       translation:
         x: 0.0
-        y: 0.030219
-        z: -0.02354
+        y: 0.0
+        z: 0.0
       quaternion:
         x: 0.0
-        y: -0.0
+        y: 0.0
         z: 0.0
         w: 1.0
   Camera:
@@ -31,9 +31,9 @@ Sensor:
     frame: camera
     extrinsic:
       translation:
-        x: -0.01
-        y: 0.02
-        z: -0.04708
+        x: 0.0043
+        y: 0.0
+        z: -0.0269
       quaternion:
         x: 0.5000000001025516
         y: -0.49999999979489657
@@ -68,9 +68,9 @@ Sensor:
     frame: imu
     extrinsic:
       translation:
-        x: 0.0
-        y: 0.0
-        z: 0.0
+        x: -0.0106
+        y: -0.0099
+        z: 0.0155
       quaternion:
         x: 0.0
         y: 0.0

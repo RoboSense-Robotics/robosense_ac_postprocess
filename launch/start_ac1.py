@@ -12,7 +12,7 @@ def generate_launch_description():
         'rviz2_config',
         'rviz2_config.rviz'
     )
-    config_file = os.path.join(package_dir, "config", "usr_config.yaml")
+    config_file = os.path.join(package_dir, "config", "usr_config_ac1.yaml")
 
     postprocess_node = Node(
         package='robosense_ac_postprocess',

@@ -31,6 +31,10 @@ struct RangeImageParams
   double pitch_max;
   double yaw_min;
   double yaw_max;
+  double detection_range;
+  double range_change_thresh;
+  double color_change_thresh;
+  double color_min_thresh;
 };
 
 // 查表法计算asin

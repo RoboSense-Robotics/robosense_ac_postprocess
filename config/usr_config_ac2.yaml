@@ -1,11 +1,19 @@
 postprocess_node:
-  calib_file: "config/calibration.yaml"
-  sub_image_topic: /rs_camera/rgb
+  ac_mode: 2 # 1-ac1; 2-ac2
+  calib_file: "config/calibration_ac2.yaml"
+  sub_calib_topic: "/device_calib_info"
+  sub_image_topic: /rs_camera/left/color/image_raw
+  sub_second_image_topic: /rs_camera/right/color/image_raw
   sub_lidar_topic: /rs_lidar/points
   sub_imu_topic: /rs_imu
-  MOTION_CORRECT: true
+  USE_COMPRESSED_IMAGE: false # 设置为 true, 订阅压缩格式的图像
+  USE_ONLINE_CALIB_TOPIC: false # 设置为 true, 则订阅驱动发布的标定信息， 设置为 false， 则加载离线的标定文件
+  USE_SECOND_IMAGE: true # 使用双目图像染色 （增加了对双目颜色差异的判断和滤除）
+  MOTION_CORRECT: false
+  EDGE_FILTER: true # 设置为 true, 则开启对边缘染色异常杂点的滤除
   USING_IMU_LINEAR_ACCELERATION: false # 使用IMU线加速度数据进行运动补偿
   USING_ODOM_LINEAR_VELOCITY: false # 使用ODOM数据作为线速度补偿, 如果为true，则会覆盖IMU线加速度计算出来的位移
+  INFLATE_DEPTH_PARAM: -0.0 # 点云膨胀，对相机外参做深度补偿
   NUM_DRIFT: 100 # 计算零飘所需要的IMU数据数目
   FRAME_TAIL: true # 将点补偿到点云帧尾时间
   USE_RANGE_IMG: false # 使用范围图进行去遮挡
@@ -17,10 +25,14 @@ postprocess_node:
   RANGE_IMG_TOPIC: /camera/image_raw/range_motion
   CAM_RANGE_IMG_TOPIC: /camera/image_raw/cam_range_motion
   # PROJECTION_ROOT: # 保存数据的位置
-  CAMERA_LIDAR_TIME_DURA_THRES: 0.05
+  CAMERA_LIDAR_TIME_DURA_THRES: 0.2
   RANGE_IMAGE:
-    resolution: 0.625 # [°]
+    resolution: 0.5 # [°]
     pitch_min: -45.0  # [°]
     pitch_max:  45.0  # [°]
-    yaw_min:   -35.0  # [°]
-    yaw_max:    35.0  # [°]
+    yaw_min:   -60.0  # [°]
+    yaw_max:    60.0  # [°]
+    detection_range: 10
+    range_change_thresh: 0.1
+    color_change_thresh: 50
+    color_min_thresh: 50

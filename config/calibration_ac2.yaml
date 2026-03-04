@@ -1,0 +1,132 @@
+DEVICE_ID: 1111BEDC0028
+CALI_TIME: 20251226_180234
+Sensor:
+  Lidar:
+    base_link: sensor
+    frame: lidar
+    extrinsic:
+      translation:
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      quaternion:
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 1.0
+  Camera:
+    base_link: sensor
+    frame: camera
+    extrinsic:
+      translation:
+        x: 0.0
+        y: 0.0278
+        z: 0.0
+      quaternion:
+        x: -0.4981633016278306
+        y: 0.5027118705935678
+        z: -0.5004164799633815
+        w: 0.4986957455770338
+    intrinsic:
+      model: Pinhole
+      int_matrix:
+        - 743.8327685162693
+        - 0
+        - 615.1431486831508
+        - 0
+        - 746.925675006805
+        - 494.3654172485134
+        - 0
+        - 0
+        - 1
+      dist_coeff:
+        - 3.197438866576029
+        - 3.912077191246364
+        - 2.133300655503271e-05
+        - -1.327065400333023e-05
+        - 0.4663430231079925
+        - 3.545440705959454
+        - 4.961872893686955
+        - 1.552783273534546
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+      image_size:
+        - 1280
+        - 960
+  Camera_R:
+    base_link: camera
+    frame: camera_r
+    extrinsic:
+      translation:
+        x: 0.06286573676123769
+        y: 0.0006406616065377672
+        z: 0.000623243349039834
+      quaternion:
+        x: -0.001460922714436081
+        y: 0.001593685194942205
+        z: 0.0004304672185851196
+        w: 0.999997570282196
+    intrinsic:
+      model: Pinhole
+      int_matrix:
+        - 742.4551527014161
+        - 0
+        - 600.2912745922052
+        - 0
+        - 745.5858103614094
+        - 503.437245398977
+        - 0
+        - 0
+        - 1
+      dist_coeff:
+        - -0.2148728895303488
+        - -0.6114819004304143
+        - -6.188358357216431e-05
+        - -0.0001743325615961525
+        - -0.05678638667317556
+        - 0.1353845921590329
+        - -0.7740737463031359
+        - -0.2106512220671008
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+      image_size:
+        - 1280
+        - 960
+  IMU:
+    base_link: sensor
+    frame: imu
+    extrinsic:
+      translation:
+        x: -0.0302
+        y: -0.0182
+        z: 0.0062
+      quaternion:
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 1.0
+CALI_INFO:
+  CAM_INTRINSIC:
+    error_thresh: 1
+    cali_error: 0.2118344997607436
+    right_cali_error: 0.6848953135146491
+    stereo_rms_error: 0.2265004618905497
+    stereo_epipolar_error: 2.150946429788851
+  IMU_EXTRINSIC:
+    delta_angle_thresh: 1
+    delta_angle: 0
+  CAM_EXTRINSIC:
+    delta_angle_thresh: 5
+    error_thresh: 2
+    delta_angle: 0.4067960225443906
+    angle_error: 0.5947617794073508
+    rmse_error: 20.50004870043643
+    pixel_error: 7.705115658855164

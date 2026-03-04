@@ -31,11 +31,15 @@ struct PostprocessOutputMsg {
   PostprocessOutputMsg() {
     motion_points_ptr = PointCloud2MsgPtr(new PointCloud2Msg());
     rgb_points_ptr = PointCloud2MsgPtr(new PointCloud2Msg());
+    edge_points_ptr = PointCloud2MsgPtr(new PointCloud2Msg());
     points_proj_img_ptr = ImageMsgPtr(new ImageMsg());
+    ori_img_ptr = ImageMsgPtr(new ImageMsg());
   }
   PointCloud2MsgPtr motion_points_ptr;
   PointCloud2MsgPtr rgb_points_ptr;
+  PointCloud2MsgPtr edge_points_ptr;
   ImageMsgPtr points_proj_img_ptr;
+  ImageMsgPtr ori_img_ptr;
 };
 
 struct TransformXYZQuat {
@@ -67,16 +71,29 @@ struct MotionConfig {
   bool using_odom_linear_velocity;      // Whether to use ODOM data as linear velocity compensation, if true, it will override the displacement calculated from IMU linear acceleration
   bool frame_tail;                      // Whether to compensate points to the end time of the point cloud frame
   bool use_range_img;
+  bool use_compressed_image;
+  bool use_online_calib_topic; // the way to get calib info, if true , subscribe online topic, else load offline calib yaml
+  bool use_second_image;
+  bool use_edge_filter;
+  int downsample_row;
+  int downsample_col;
+  int ac_mode; //1-ac1, 2-ac2
   double thres;
+  double inflate_depth_param;
   std::size_t num_drift;                // The number of IMU data required to calculate drift
   std::string projection_root;          // Path to save data (commented out)
   std::string sub_image_topic;
+  std::string sub_second_image_topic;
+  std::string sub_calib_topic;
   std::string sub_lidar_topic;
   std::string sub_imu_topic;
+  std::string pub_ori_image_topic;
 
   std::string ori_points_topic;
+  std::string edge_points_topic;
   std::string motion_points_topic;
   std::string motion_rgb_points_topic;
+  std::string motion_stereo_rgb_points_topic;
   std::string ori_rgb_points_topic;
   std::string ori_deocc_rgb_points_topic;
   std::string ori_img_topic;
@@ -88,13 +105,22 @@ struct MotionConfig {
 struct CameraConfig {
   CameraConfig() = default;
   Intrinsics  intrinsics;
+  Intrinsics  left_intrinsics;
+  Intrinsics  right_intrinsics;
+  Eigen::Matrix4d tf_CamR2Cam;
   CameraConfig(Intrinsics intr) : intrinsics(intr) {}
 };
 
 struct LidarConfig {
   LidarConfig() = default;
-  TransformXYZQuat T_Lidar2Cam;    // Transformation from LIDAR to Camera
-  TransformXYZQuat T_Lidar2IMU;    // Transformation from LIDAR to IMU
+  TransformXYZQuat T_Cam2Lidar;
+  TransformXYZQuat T_IMU2Lidar;
+  Eigen::Matrix4d tf_Lidar2Cam;
+  Eigen::Matrix4d tf_Lidar2IMU;
+  Eigen::Matrix4d tf_IMU2Lidar;
+  Eigen::Matrix4d tf_Cam2Lidar;
+  Eigen::Matrix4d tf_CamR2Lidar;
+  Eigen::Matrix4d tf_Lidar2CamR;
   RangeImageParams range_image_info;
 };
 
@@ -106,6 +132,10 @@ struct NodeConfig {
 };
 
 NodeConfig ParseNodeConfig(const YAML::Node& cfg);
+
+void loadOfflineCaliInfo(const std::string &calib_file, NodeConfig &res_cfg, const bool use_stereo);
+
+void loadCamInfo(const YAML::Node &cam_cfg, Intrinsics &intrinsics);
 
 } // namespace postprocess
 } // namespace robosense
