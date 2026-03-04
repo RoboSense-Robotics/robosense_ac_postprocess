@@ -7,20 +7,30 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+# 检测 ROS 版本
+if(DEFINED ENV{ROS_VERSION})
+    set(ROS_DISTRO_VERSION $ENV{ROS_VERSION})
+    message("set ROS_VERSION" $ENV{ROS_VERSION})
+else()
+    # 尝试自动检测 ROS 1
+    find_package(ros_version REQUIRED QUIET)
+    if(ros_version_FOUND)
+        set(ROS_DISTRO_VERSION 1)
+        set(ROS_VERSION "ROS1")
+        message("Found ROS_VERSION")
+    else()
+        message(WARNING "ROS_VERSION not defined, defaulting to ROS 2")
+        set(ROS_DISTRO_VERSION 2)
+        set(ROS_VERSION "ROS2")
+    endif()
+endif()
+
 find_package(PCL REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(OpenCV REQUIRED)
 
-find_package(catkin QUIET)  # ROS1 核心包
-find_package(ament_cmake QUIET)  # ROS2 核心包
-
-if(catkin_FOUND)
-  set(ROS_VERSION "ROS1")
-elseif(ament_cmake_FOUND)
-  set(ROS_VERSION "ROS2")
-endif()
-
-if(ROS_VERSION STREQUAL "ROS1")
+if(${ROS_DISTRO_VERSION} EQUAL 1)
   message(STATUS "Building with ROS1")
   add_definitions(-DUSE_ROS1)  # 定义ROS1宏
   add_definitions(-DPROJECT_PATH="${PROJECT_SOURCE_DIR}")
@@ -29,21 +39,24 @@ if(ROS_VERSION STREQUAL "ROS1")
     sensor_msgs
     pcl_conversions
     cv_bridge
+    robosense_msgs
+    message_filters
   )
   include_directories(${catkin_INCLUDE_DIRS})
   catkin_package()
-elseif(ROS_VERSION STREQUAL "ROS2")
+elseif(${ROS_DISTRO_VERSION} EQUAL 2)
   message(STATUS "Building with ROS2")
   add_definitions(-DUSE_ROS2)  # 定义ROS2宏
 
   # find dependencies
   find_package(ament_cmake REQUIRED)
+  find_package(ament_index_cpp REQUIRED)
   find_package(rclcpp REQUIRED)
   find_package(sensor_msgs REQUIRED)
   find_package(cv_bridge REQUIRED)
   find_package(pcl_conversions REQUIRED)
   find_package(robosense_msgs REQUIRED)
-
+  find_package(message_filters REQUIRED)
 
   if(BUILD_TESTING)
     find_package(ament_lint_auto REQUIRED)
@@ -63,6 +76,8 @@ add_executable(postprocess_node src/postprocess_node.cpp
           src/postprocess/config.cpp
           src/postprocess/range_image.cpp
           src/postprocess/imu_process.cpp
+          src/postprocess/rgb_postprocess.cpp
+          src/postprocess/stereo_image_projector.cpp
           src/postprocess/postprocess_impl.cpp
 )
 
@@ -72,13 +87,13 @@ target_include_directories(postprocess_node PUBLIC
   ${OpenCV_INCLUDE_DIRS}
 )
 
-if(ROS_VERSION STREQUAL "ROS1")
+if(${ROS_DISTRO_VERSION} EQUAL 1)
   target_link_libraries(postprocess_node
     ${OpenCV_LIBS}
     ${YAML_CPP_LIBRARIES}
     ${catkin_LIBRARIES}
   )
-elseif(ROS_VERSION STREQUAL "ROS2")
+elseif(${ROS_DISTRO_VERSION} EQUAL 2)
   target_link_libraries(postprocess_node
     ${OpenCV_LIBS}
     ${YAML_CPP_LIBRARIES}
@@ -90,14 +105,16 @@ elseif(ROS_VERSION STREQUAL "ROS2")
     PCL
     pcl_conversions
     robosense_msgs
+    message_filters
+    ament_index_cpp
   )
   install(TARGETS postprocess_node
     DESTINATION lib/${PROJECT_NAME})
 endif()
 
-if(ROS_VERSION STREQUAL "ROS1")
+if(${ROS_DISTRO_VERSION} EQUAL 1)
 #
-elseif(ROS_VERSION STREQUAL "ROS2")
+elseif(${ROS_DISTRO_VERSION} EQUAL 2)
   install(DIRECTORY
   launch
   rviz2_config

@@ -4,7 +4,7 @@
 
 ## 1. 简介
 
-`robosense_ac_postprocess` 是激光与图像的后处理代码仓库，通过图像给点云染色。
+`robosense_ac_postprocess` 是激光与图像的后处理代码仓库，通过图像给点云染色, 兼容 AC1 和 AC2，标定文件 均以 Lidar 为 Base。
 
 ## 2. 前置依赖
 
@@ -38,7 +38,7 @@ git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b 
 cd ac_studio
 rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
-请先按照[说明](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/blob/main/modules/ac_driver/README.md)编译 ROS2 所需 robosense_msgs，ROS1 则无需编译。
+请先按照[说明](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/blob/main/modules/ac_driver/README.md)编译 ROS 所需 robosense_msgs。
 ### 3.3 编译 robosense_ac_postprocess
 
 #### 基于 ROS1 环境
@@ -70,19 +70,14 @@ source install/setup.bash
 ```
 
 ## 4. 运行
-
 ### 4.1 获取数据
-数据可以通过在线连接 Active Camera 或离线播放数据包两种方式获取。
-
+可以连接 Active Camera 在线获取数据，或者离线播放数据包进行测试。
 #### 4.1.1 运行 Active Camera
-这是从AC1实时获取数据的在线模式。
 
-- 如果使用 ROS1 请参考此[仓库](https://github.com/RoboSense-Robotics/robosense_ac_ros_sdk_infra)以确保 `robosense_ac_ros_sdk_infra` 包已编译并在工作空间中运行。
-
-- 如果使用 ROS2 请参考此[仓库](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra)以确保 `robosense_ac_ros2_sdk_infra` 包已编译并在工作空间中运行。
+参考 [文档](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/tree/main/modules/ac_driver) 运行在线节点，实时获取数据。按照文档说明在终端设置对应环境变量，启用零拷贝模式或非零拷贝模式获取数据。
 
 #### 4.1.2 离线播放数据
-这是使用已录制数据包的离线模式，使用 ros 命令播放数据包，例如：
+使用 `ros` 命令播放数据包，例如：
 
 ``` bash
 # ros1
@@ -92,13 +87,24 @@ ros2 bag play BAG_PATH
 ```
 ### 4.2 运行节点
 
-使用 `ros` 命令运行 `postprocess` 节点：
+AC1和AC2的配置参数有差别，通过 `ros` 命令可以运行节点
+
+- AC1 运行以下指令
 
 ```bash
 # ros1
-roslaunch launch/start.launch
+roslaunch launch/start_ac1.launch
 # ros2
-ros2 launch robosense_ac_postprocess start.py
+ros2 launch robosense_ac_postprocess start_ac1.py
+```
+
+- AC2 运行以下指令
+
+```bash
+# ros1
+roslaunch launch/start_ac2.launch
+# ros2
+ros2 launch robosense_ac_postprocess start_ac2.py
 ```
 ## 5. FAQ
 
