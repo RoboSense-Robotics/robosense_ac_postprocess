@@ -11,7 +11,7 @@ Panels:
         - /PointCloud21
         - /Image1
       Splitter Ratio: 0.5
-    Tree Height: 363
+    Tree Height: 244
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -75,7 +75,7 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
-      Size (Pixels): 8
+      Size (Pixels): 5
       Size (m): 0.009999999776482582
       Style: Points
       Topic: /rslidar_points_motion_rgb
@@ -123,7 +123,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.390958309173584
+      Distance: 8.619633674621582
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -131,17 +131,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 2.1652889251708984
-        Y: 0.13008973002433777
-        Z: 0.17284289002418518
+        X: 1.8510597944259644
+        Y: -0.5232603549957275
+        Z: 0.07541661709547043
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.06479740887880325
+      Pitch: 0.15520267188549042
       Target Frame: <Fixed Frame>
-      Yaw: 3.2504098415374756
+      Yaw: 3.3854126930236816
     Saved: ~
 Window Geometry:
   Displays:

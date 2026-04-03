@@ -302,7 +302,12 @@ void PostprocessImpl::AddData(const CalibMsgPtr& msg_ptr) {
   Tf_lidar_2_camR_ = Tf_camR_2_lidar_.inverse();
 
   stereo_baseline_ = msg_ptr->camrtocamtx;
-
+  if(use_second_image_)
+  {
+    stereo_img_projector_->cameraParamInitialization(left_distortion_coeffs_, left_camera_intrisic_,
+                                                     right_distortion_coeffs_, right_camera_intrisic_,
+                                                     stereo_baseline_);
+  }
   std::cout << Name() << ": update online calib info done  ! " <<std::endl;
   std::cout<<"-- camera_intrisic_ "<<std::endl;
   std::cout<<camera_intrisic_<<std::endl;
