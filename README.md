@@ -39,9 +39,12 @@ Use the `rosdep` tool to install the dependencies required for compiling `robose
 cd ac_studio
 rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
-Please follow the [instructions](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/blob/main/modules/ac_driver/README.md) to compile the required robosense_msgs for ROS.
 
 ### 3.3 Compile robosense_ac_postprocess
+
+Please follow the [instructions](https://github.com/RoboSense-Robotics/robosense_ac_driver/blob/main/README.md) to build the ROS driver `robosense_ac_driver` first, including the `robosense_msgs` required by this project.
+
+Complete the driver build first. Then, in the `robosense_ac_postprocess` workspace, source the driver’s environment, and proceed to build `robosense_ac_postprocess`.
 
 #### For ROS1 Environment
 
@@ -49,6 +52,7 @@ Execute the following command in the workspace to compile and install `robosense
 
 ```bash
 cd WORKSPACE_PATH
+source xxx/ac_driver/devel/setup.bash
 catkin build robosense_ac_postprocess
 ```
 
@@ -62,6 +66,7 @@ source devel/setup.bash
 
 ```bash
 cd WORKSPACE_PATH
+source xxx/ac_driver/install/setup.bash
 colcon build --symlink-install --parallel-workers 8 --packages-select robosense_ac_postprocess
 ```
 

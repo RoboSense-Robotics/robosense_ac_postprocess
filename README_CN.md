@@ -38,8 +38,11 @@ git clone https://github.com/RoboSense-Robotics/robosense_ac_postprocess.git -b 
 cd ac_studio
 rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 ```
-请先按照[说明](https://github.com/RoboSense-Robotics/robosense_ac_ros2_sdk_infra/blob/main/modules/ac_driver/README.md)编译 ROS 所需 robosense_msgs。
+
 ### 3.3 编译 robosense_ac_postprocess
+
+请先按照[说明](https://github.com/RoboSense-Robotics/robosense_ac_driver/blob/main/README_CN.md)编译 ROS 驱动 `robosense_ac_driver`，这里包含本工程所需 `robosense_msgs`。
+先编译完成驱动后，然后在 `robosense_ac_postprocess` 工程的路径下，先 source 驱动的环境, 再继续编译 `robosense_ac_postprocess`
 
 #### 基于 ROS1 环境
 
@@ -47,6 +50,7 @@ rosdep install --from-paths robosense_ac_postprocess --ignore-src -r -y
 
 ```
 cd WORKSPACE_PATH
+source xxx/ac_driver/devel/setup.bash
 catkin build robosense_ac_postprocess
 ```
 
@@ -60,6 +64,7 @@ source devel/setup.bash
 
 ```bash
 cd WORKSPACE_PATH
+source xxx/ac_driver/install/setup.bash
 colcon build --symlink-install --parallel-workers 8 --packages-select robosense_ac_postprocess
 ```
 
